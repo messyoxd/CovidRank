@@ -21,3 +21,4 @@ pip install -r requirements.txt
 
 ![result](./casosAcumulados.png)
 ![result](./obitosAcumulados.png)
+![result](./casosNovos.png)

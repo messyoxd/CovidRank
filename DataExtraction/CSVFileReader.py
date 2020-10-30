@@ -16,11 +16,19 @@ class CSVFileReader:
                 "DataExtraction")[0], "DataFiles"))
         self.filepath = self.filepath.split(".zip")[0] + ".csv"
         self.df = pd.read_csv(self.filepath, usecols=[
-                              'estado', 'municipio', 'data', 'casosAcumulado', 'obitosAcumulado'], sep=';')
+                              'estado', 'municipio', 'data', 'casosAcumulado', 'casosNovos', 'obitosAcumulado'], sep=';')
         self.ultimo_registro = ultimo_registro
 
     def retornar_estados(self):
         return [item for item, count in collections.Counter(self.df["estado"]).items() if count > 1 and item.__class__.__name__ == "str"]
+
+    def retornar_casos_novos_por_estado(self, estado):
+        aux_df = self.df.loc[(self.df["estado"] == estado) & (
+            self.df["data"] == self.ultimo_registro) & (self.df["municipio"].notnull())]
+        casos = 0
+        for index, casosNovos in aux_df.iterrows():
+            casos += casosNovos["casosNovos"]
+        return casos
 
     def retornar_casos_acumulados_por_estado(self, estado):
         aux_df = self.df.loc[(self.df["estado"] == estado) & (
@@ -47,7 +55,8 @@ class CSVFileReader:
         for estado in self.retornar_estados():
             dados[estado] = {
                 "casosAcumulados": pool.submit(self.retornar_casos_acumulados_por_estado, estado),
-                "obitosAcumulados": pool.submit(self.retornar_obitos_acumulados_por_estado, estado)
+                "obitosAcumulados": pool.submit(self.retornar_obitos_acumulados_por_estado, estado),
+                "casosNovos": pool.submit(self.retornar_casos_novos_por_estado, estado),
             }
         return dados
 
