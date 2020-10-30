@@ -1,4 +1,7 @@
 
+import matplotlib.pyplot as plt
+
+
 class CovidRank:
 
     def __init__(self, sort_algorithm, data):
@@ -6,8 +9,40 @@ class CovidRank:
         self.data = data
 
     def retornar_casosAcumulados_ordem_decrescente(self) -> list:
-        estado_casos = list()        
+        estado_casos = list()
         for key in self.data.keys():
-            estado_casos.append((key, self.data[key]["casosAcumulados"].result()))
-        print(estado_casos)
+            estado_casos.append(
+                (key, self.data[key]["casosAcumulados"].result()))
         return self.sort_algorithm(estado_casos, len(estado_casos))
+
+    def retornar_obitosAcumulados_ordem_decrescente(self) -> list:
+        estado_obitos = list()
+        for key in self.data.keys():
+            estado_obitos.append(
+                (key, self.data[key]["obitosAcumulados"].result()))
+        return self.sort_algorithm(estado_obitos, len(estado_obitos))
+
+    # def plot_in_columns(self, data, cv, label) -> None:
+    #     x = []
+    #     y = []
+    #     for i in range(len(data)):
+    #         result = data[i].result()
+    #         x.append(list(result.values())[0][0])
+    #         y.append(list(result.values())[0][1])
+    #         print(f"{label} -> elementos: {x[i]} segundos: %.3f" % y[i])
+    #     cv.plot(x, y, label=label)
+
+    
+
+    def plot_data(self, labels, data, title, ylabel, filename, formater) -> None:
+        ###### Plotar os dados ###############
+        fig = plt.figure(figsize=(20, 10))
+        ax = fig.add_subplot(111)
+        ax.yaxis.set_major_formatter(formater)
+        ax.bar(labels, data)
+        ax.set_ylabel(ylabel)
+        ax.set_title(title)
+        ax.bar(labels, data, color="blue")
+        fig.savefig(f'{filename}.png')
+        ######################################
+

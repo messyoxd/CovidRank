@@ -16,3 +16,8 @@ source .env/bin/activate
 ```
 pip install -r requirements.txt
 ```
+
+## Samples
+
+![result](./casosAcumulados.png)
+![result](./obitosAcumulados.png)
