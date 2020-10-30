@@ -12,22 +12,22 @@ class CovidRank:
         estado_casos = list()
         for key in self.data.keys():
             estado_casos.append(
-                (key, self.data[key]["casosNovos"].result()))
+                (key, self.data[key]["casosNovos"]))
         return self.sort_algorithm(estado_casos, len(estado_casos))
 
     def retornar_casosAcumulados_ordem_decrescente(self) -> list:
         estado_casos = list()
         for key in self.data.keys():
             estado_casos.append(
-                (key, self.data[key]["casosAcumulados"].result()))
+                (key, self.data[key]["casosAcumulados"]))
         return self.sort_algorithm(estado_casos, len(estado_casos))
 
     def retornar_obitosAcumulados_ordem_decrescente(self) -> list:
         estado_obitos = list()
         for key in self.data.keys():
             estado_obitos.append(
-                (key, self.data[key]["obitosAcumulados"].result()))
-        return self.sort_algorithm(estado_obitos, len(estado_obitos))    
+                (key, self.data[key]["obitosAcumulados"]))
+        return self.sort_algorithm(estado_obitos, len(estado_obitos))
 
     def plot_data(self, labels, data, title, ylabel, filename, formater) -> None:
         ###### Plotar os dados ###############
@@ -40,4 +40,3 @@ class CovidRank:
         ax.bar(labels, data, color="blue")
         fig.savefig(f'{filename}.png')
         ######################################
-

@@ -45,19 +45,32 @@ class CSVFileReader:
         for index, obitosAcumulado in aux_df.iterrows():
             obitos += obitosAcumulado["obitosAcumulado"]
         return obitos
+    
+    def retornar_dados(self, estado, colunas):
+      aux_df = self.df.loc[(self.df["estado"] == estado) & (
+            self.df["data"] == self.ultimo_registro) & (self.df["municipio"].notnull())]
+      contadores = []
+      for i in range(len(colunas)):
+        contadores.append(0)
+      for index, dados in aux_df.iterrows():
+        for i in range(len(colunas)):
+          contadores[i] += dados[colunas[i]]
+      return contadores
 
-    def retornar_dados_covid(self, max_workers=None):
+    def retornar_dados_covid(self):
         dados = dict()
-        if max_workers == None:
-            pool = ProcessPoolExecutor(max_workers=1)
-        else:
-            pool = ProcessPoolExecutor(max_workers=max_workers)
         for estado in self.retornar_estados():
+            dadosCsv = self.retornar_dados(estado, ["casosAcumulado", "obitosAcumulado", "casosNovos"])
             dados[estado] = {
-                "casosAcumulados": pool.submit(self.retornar_casos_acumulados_por_estado, estado),
-                "obitosAcumulados": pool.submit(self.retornar_obitos_acumulados_por_estado, estado),
-                "casosNovos": pool.submit(self.retornar_casos_novos_por_estado, estado),
+              "casosAcumulados": dadosCsv[0],
+              "obitosAcumulados": dadosCsv[1],
+              "casosNovos": dadosCsv[2]
             }
+            # dados[estado] = {
+            #     "casosAcumulados": self.retornar_casos_acumulados_por_estado(estado),
+            #     "obitosAcumulados": self.retornar_obitos_acumulados_por_estado(estado),
+            #     "casosNovos": self.retornar_casos_novos_por_estado(estado),
+            # }
         return dados
 
 

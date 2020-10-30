@@ -3,14 +3,16 @@ from DataComparation.CovidRank import CovidRank
 from SortingAlgorithm.ShellSort import Shell
 import os
 
+
 def formater(x, pos):
-        return '{:1.0f}'.format(x*1)
+    return '{:1.0f}'.format(x*1)
+
 
 if __name__ == "__main__":
     filename = "HIST_PAINEL_COVIDBR_28out2020"
     ultima_atualizacao = "2020-10-28"
     d = CSVFileReader(filename+".zip", ultima_atualizacao)
-    c = CovidRank(Shell.decrescent_shell, d.retornar_dados_covid(8))
+    c = CovidRank(Shell.decrescent_shell, d.retornar_dados_covid())
     rankCasosAcumulados = c.retornar_casosAcumulados_ordem_decrescente()
     labels = []
     dados = []
