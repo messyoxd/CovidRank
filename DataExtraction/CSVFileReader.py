@@ -29,7 +29,8 @@ class CSVFileReader:
         for index, dados in aux_df.iterrows():
             for i in range(len(colunas)):
                 numero = dados[colunas[i]]
-                contadores[i] += abs(numero)
+                if numero > 0:
+                    contadores[i] += numero
         return contadores
 
     def retornar_dados_covid(self):
